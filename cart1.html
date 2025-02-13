@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Online Shop for Everything</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
+</head>
+<body>
+    <section id="header">
+        <a href="#"><img src="image/logo.jpeg" class="logo" alt=""></a>
+        <div>
+            <ul id="navbar">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop1.html">Shop</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li id="la-bag"><a class="active" href="cart.html"><i class="far fa-shopping-bag"></i></a></li>
+                <a href='#' id="close"><i class="far fa-times"></i></a>
+            </ul>
+        </div>
+        <div id="mobile">
+            <a href="cart.html"><i class="far fa-shopping-bag"></i></a>
+            <i id="bar" class="fas fa-outdent"></i>
+        </div>
+    </section>
+
+    <section id="page-header" class="about-header">
+        <h2>Your Cart</h2>
+        <p>Keep on shopping with us!</p>
+    </section>
+
+    <section id="cart" class="section-p1">
+        <table width="100%">
+            <thead>
+                <tr>
+                    <td>Remove</td>
+                    <td>Image</td>
+                    <td>Product</td>
+                    <td>Price</td>
+                    <td>Quantity</td>
+                    <td>Subtotal</td>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Cart items will be dynamically generated here -->
+            </tbody>
+        </table>
+    </section>
+
+    <section id="cart-add" class="section-p1">
+        <div id="coupon">
+            <h3>Apply Coupon</h3>
+            <div>
+                <input type="text" id="coupon-input" placeholder="Enter your coupon">
+                <button class="normal" onclick="applyCoupon()">Apply</button>
+            </div>
+        </div>
+
+        <div id="subtotal">
+            <h3>Cart Total</h3>
+            <table>
+                <tr>
+                    <td>Cart Subtotal</td>
+                    <td id="cart-subtotal">$0.00</td>
+                </tr>
+                <tr>
+                    <td>Shipping</td>
+                    <td id="shipping">Free</td>
+                </tr>
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td id="total">$0.00</td>
+                </tr>
+            </table>
+            <button class="normal" onclick="proceedToCheckout()">Proceed to Checkout</button>
+        </div>
+    </section>
+
+    <footer class="section-p1">
+        <!-- Footer content remains unchanged -->
+    </footer>
+
+    <script>
+        // Cart data (dummy data for demonstration)
+        let cartItems = [
+            { id: 1, name: "Cartoon Astronaut T-Shirt", price: 118.19, quantity: 1, image: "image/arrival2.jpeg" },
+            { id: 2, name: "Cartoon Astronaut T-Shirt", price: 118.19, quantity: 1, image: "image/arrival3.jpeg" },
+            { id: 3, name: "Cartoon Astronaut T-Shirt", price: 118.19, quantity: 1, image: "image/arrival1.jpeg" }
+        ];
+
+        // Function to dynamically generate cart items
+        function generateCartItems() {
+            let tbody = document.querySelector("#cart tbody");
+            tbody.innerHTML = "";
+            let cartSubtotal = 0;
+
+            cartItems.forEach(item => {
+                let row = `
+                    <tr>
+                        <td><a href="#" onclick="removeItem(${item.id})"><i class="far fa-times-circle"></i></a></td>
+                        <td><img src="${item.image}" alt=""></td>
+                        <td>${item.name}</td>
+                        <td>$${item.price.toFixed(2)}</td>
+                        <td><input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${item.id}, this.value)"></td>
+                        <td>$${(item.price * item.quantity).toFixed(2)}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+                cartSubtotal += item.price * item.quantity;
+            });
+
+            document.getElementById("cart-subtotal").textContent = `$${cartSubtotal.toFixed(2)}`;
+            document.getElementById("total").textContent = `$${cartSubtotal.toFixed(2)}`;
+        }
+
+        // Function to remove item from cart
+        function removeItem(id) {
+            cartItems = cartItems.filter(item => item.id !== id);
+            generateCartItems();
+        }
+
+        // Function to update item quantity
+        function updateQuantity(id, quantity) {
+            let item = cartItems.find(item => item.id === id);
+            item.quantity = parseInt(quantity);
+            generateCartItems();
+        }
+
+        // Function to apply coupon (not implemented)
+        function applyCoupon() {
+            alert("Coupon code is invalid.");
+        }
+
+        // Function to redirect to checkout page
+        function proceedToCheckout() {
+            // Calculate total price
+            const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+            // Redirect to checkout page with total price as query parameter
+            window.location.href = `checkout.html?total=${totalPrice}`;
+        }
+
+        // Initial generation of cart items
+        generateCartItems();
+    </script>
+</body>
+</html>

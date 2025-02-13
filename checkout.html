@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <style>
+        body {
+            background-image: url('image/chec.jpeg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            font-family: Arial, sans-serif;
+            color: white;
+            padding: 20px;
+        }
+        #checkout-container {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+            margin: auto;
+        }
+        #checkout-items {
+            margin-bottom: 20px;
+        }
+        #total-price {
+            font-weight: bold;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="checkout-container">
+        <h1>Checkout Page</h1>
+
+        <div id="checkout-items">
+            <!-- Checkout items will be displayed here -->
+        </div>
+
+        <h3>Total Price: $<span id="total-price">0</span></h3>
+
+        <button onclick="completeCheckout()">Complete Checkout</button>
+    </div>
+
+    <script>
+        function displayCheckoutItems() {
+            // Fetch the cart data from local storage
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            const checkoutItemsContainer = document.getElementById('checkout-items');
+            checkoutItemsContainer.innerHTML = '';
+
+            // Display the items in the cart on the checkout page
+            cart.forEach(item => {
+                const itemInfo = document.createElement('p');
+                itemInfo.textContent = `${item.name} - Quantity: ${item.quantity} - Price: $${(item.price * item.quantity).toFixed(2)}`;
+                checkoutItemsContainer.appendChild(itemInfo);
+            });
+
+            // Retrieve total price from query parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const totalPrice = urlParams.get('total');
+            document.getElementById('total-price').textContent = `$${totalPrice}`;
+        }
+
+        function completeCheckout() {
+            // Show alert message indicating checkout is complete
+            alert('Checkout is complete!');
+        }
+
+        // Display checkout items when the page loads
+        window.addEventListener('load', displayCheckoutItems);
+    </script>
+
+</body>
+</html>
